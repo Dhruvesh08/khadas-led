@@ -1,10 +1,14 @@
-use std::fs;
+use tokio::net::UnixDatagram;
+use tokio::io::AsyncWriteExt;
 
-fn main() -> std::io::Result<()> {
+#[tokio::main]
+async fn main() -> std::io::Result<()> {
     let path = "/sys/class/leds/sys_led/trigger";
     let trigger_value = "none";
 
-    fs::write(path, trigger_value)?;
+    let socket = UnixDatagram::unbound()?;
+    socket.connect(path)?;
 
+    socket.send(trigger_value.as_bytes()).await?;
     Ok(())
 }
