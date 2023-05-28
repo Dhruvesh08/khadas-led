@@ -1,12 +1,15 @@
-use std::os::unix::net::UnixStream;
-use std::io::prelude::*;
+use std::process::Command;
 
-fn main() -> std::io::Result<()> {
-    let path = "/sys/class/leds/sys_led/trigger";
-    let mut stream = UnixStream::connect(path)?;
-    stream.write_all(b"none")?;
-    let mut response = String::new();
-    stream.read_to_string(&mut response)?;
-    println!("{response}");
-    Ok(())
+fn main() {
+    let mut output = Command::new("sudo")
+        .arg("tee")
+        .arg("/sys/class/leds/sys_led/trigger")
+        .arg("none")
+        .spawn()
+        .expect("Failed to execute command.");
+
+    let status = output.wait().expect("Failed to wait for command execution.");
+    if !status.success() {
+        eprintln!("Command failed with exit code: {:?}", status.code());
+    }
 }
