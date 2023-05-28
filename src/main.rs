@@ -1,7 +1,6 @@
-use std::fs::File;
-use std::io::Write;
+use std::fs::write;
 
-fn main() {
-    let mut file = File::open("/sys/class/leds/sys_led/trigger").unwrap();
-    file.write_all(b"none").unwrap();
+fn main() -> std::io::Result<()> {
+    write("/sys/class/leds/sys_led/trigger", "none")?;
+    Ok(())
 }
