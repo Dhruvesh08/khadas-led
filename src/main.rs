@@ -5,13 +5,11 @@
 //     Ok(())
 // }
 
-use std::fs::File;
-use std::io::Write;
+use std::fs::{File};
+use std::io::{self, prelude::*};
 
-fn main() {
-    let mut file = match File::open("/sys/class/leds/sys_led/trigger") {
-        Ok(file) => file,
-        Err(e) => panic!("Error opening file: {}", e),
-    };
-    file.write_all(b"none").unwrap();
+fn main() -> io::Result<()> {
+    let mut file = File::create("/sys/class/leds/sys_led/trigger")?;
+    file.write(b"none")?;
+    Ok(())
 }
