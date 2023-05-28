@@ -1,13 +1,10 @@
-use std::os::unix::net::UnixStream;
-use std::io::prelude::*;
+use std::fs;
 
 fn main() -> std::io::Result<()> {
-
     let path = "/sys/class/leds/sys_led/trigger";
-    let mut stream = UnixStream::connect(path)?;
-    stream.write_all(b"none")?;
-    let mut response = String::new();
-    stream.read_to_string(&mut response)?;
-    println!("{response}");
+    let trigger_value = "none";
+
+    fs::write(path, trigger_value)?;
+
     Ok(())
 }
