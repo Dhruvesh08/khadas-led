@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package led_controller;
+
+service LedController {
+  rpc SetMode (SetModeRequest) returns (SetModeResponse);
+}
+
+message SetModeRequest {
+  string mode = 1;
+}
+
+message SetModeResponse {
+  bool success = 1;
+}
